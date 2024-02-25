@@ -17,7 +17,8 @@ The rulebook contained within this repository (DaddyGrimbark/Rosterizer-Trench-C
 For the definitive source of the official rules, please refer to the official website: https://trenchcrusade.com
 
 ## Downloading and Viewing the Rulebook
-TBD
+In Rosterizer (from the site tour OR the Rulebooks tab), import a rulebook; and paste this url in the URL field; then click “Import”:  
+`https://raw.githubusercontent.com/DaddyGrimdark/Rosterizer-Trench-Crusade/main/Trench_Crusade_Trench_Crusade_Playtest_Rules.rulebook`
 
 ## Contributions
 This repository is the unofficial source for the Trench Crusade rulebook, and contributions from the community are welcome, particularly in the form of translations, clarifications, and enhancements to the rules, provided they adhere to the guidelines set forth by the GNU GENERAL PUBLIC LICENSE v3.

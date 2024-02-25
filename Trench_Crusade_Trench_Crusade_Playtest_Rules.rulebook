@@ -1,6 +1,6 @@
 {
   "name": "Trench Crusade Playtest Rules",
-  "revision": "1.2.0",
+  "revision": "1.2.1",
   "game": "Trench Crusade",
   "genre": "generic",
   "publisher": "",
@@ -23,12 +23,6 @@
             "statType": "numeric",
             "value": null,
             "visibility": "hidden"
-          },
-          "Melee": {
-            "format": "{v} Dice"
-          },
-          "Ranged": {
-            "format": "{v} Dice"
           }
         },
         "templateClass": "Model"
@@ -39,7 +33,7 @@
           "Type": "game piece"
         },
         "rules": {
-          "formatMeleeDiceNegative": {
+          "formatMeleeDiceNon-positive": {
             "actions": [
               {
                 "actionType": "set",
@@ -58,7 +52,7 @@
             "evals": [
               {
                 "actionable": true,
-                "max": -1,
+                "max": 0,
                 "not": false,
                 "operator": "AND",
                 "paths": [
@@ -74,42 +68,7 @@
             "evaluate": "AND",
             "failState": "pass"
           },
-          "formatMeleeDiceZero": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Melee",
-                    "format"
-                  ]
-                ],
-                "value": "{v}"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Melee",
-                    "value"
-                  ]
-                ],
-                "value": 0
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
-          "formatRangedDiceNegative": {
+          "formatRangedDiceNon-positive": {
             "actions": [
               {
                 "actionType": "set",
@@ -128,7 +87,7 @@
             "evals": [
               {
                 "actionable": true,
-                "max": -1,
+                "max": 0,
                 "not": false,
                 "operator": "AND",
                 "paths": [
@@ -139,41 +98,6 @@
                     "value"
                   ]
                 ]
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
-          "formatRangedDicePositive": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Ranged",
-                    "format"
-                  ]
-                ],
-                "value": "{v}"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Ranged",
-                    "value"
-                  ]
-                ],
-                "value": 0
               }
             ],
             "evaluate": "AND",
@@ -678,33 +602,57 @@
           ]
         },
         "rules": {
+          "Only half of your Heretic Troopers can upgrade.": {
+            "evals": [
+              {
+                "actionable": true,
+                "max": [
+                  "{roster}",
+                  "tally",
+                  "Heretic Trooper"
+                ],
+                "not": false,
+                "operator": "AND",
+                "paths": [
+                  [
+                    "{roster}",
+                    "tally",
+                    "Legionnaire"
+                  ]
+                ]
+              }
+            ],
+            "evaluate": "AND",
+            "failState": "error"
+          },
           "Only one type of Legionnaire allowed (Melee OR Ranged)": {
             "evals": [
               {
                 "actionable": true,
-                "contains": true,
-                "not": true,
+                "not": false,
                 "operator": "AND",
                 "paths": [
                   [
                     "{self}",
-                    "designation"
+                    "stats",
+                    "Upgrade",
+                    "value"
                   ]
                 ],
-                "value": "Legionnaire"
+                "value": "-"
               },
               {
                 "actionable": false,
-                "not": false,
+                "min": 1,
+                "not": true,
                 "operator": "AND",
                 "paths": [
                   [
                     "{roster}",
-                    "tally",
+                    "tracked",
                     "Legionnaire (Ranged)"
                   ]
-                ],
-                "value": 0
+                ]
               },
               {
                 "actionable": false,
@@ -713,7 +661,7 @@
                 "paths": [
                   [
                     "{roster}",
-                    "tally",
+                    "tracked",
                     "Legionnaire (Ranged)"
                   ]
                 ],
@@ -721,16 +669,16 @@
               },
               {
                 "actionable": false,
-                "not": false,
+                "min": 1,
+                "not": true,
                 "operator": "AND",
                 "paths": [
                   [
                     "{roster}",
-                    "tally",
+                    "tracked",
                     "Legionnaire (Melee)"
                   ]
-                ],
-                "value": 0
+                ]
               },
               {
                 "actionable": false,
@@ -739,7 +687,7 @@
                 "paths": [
                   [
                     "{roster}",
-                    "tally",
+                    "tracked",
                     "Legionnaire (Melee)"
                   ]
                 ],
@@ -753,12 +701,19 @@
                   [
                     "{this}",
                     "evals",
-                    "{1string}",
+                    "1",
+                    "result",
+                    "truthy"
+                  ],
+                  [
+                    "{this}",
+                    "evals",
+                    "4",
                     "result",
                     "truthy"
                   ]
                 ],
-                "value": false
+                "value": true
               },
               {
                 "actionable": true,
@@ -768,12 +723,19 @@
                   [
                     "{this}",
                     "evals",
-                    "{2string}",
+                    "2",
+                    "result",
+                    "truthy"
+                  ],
+                  [
+                    "{this}",
+                    "evals",
+                    "3",
                     "result",
                     "truthy"
                   ]
                 ],
-                "value": false
+                "value": true
               }
             ],
             "evaluate": "OR",
@@ -812,7 +774,8 @@
               }
             ],
             "evaluate": "AND",
-            "failState": "pass"
+            "failState": "pass",
+            "order": 999
           }
         },
         "stats": {
@@ -839,7 +802,7 @@
           "Upgrade": {
             "dynamic": true,
             "ranks": {
-              "Heretic Trooper": {
+              "-": {
                 "number": 0,
                 "order": 0,
                 "tracking": {
@@ -853,36 +816,23 @@
                 "order": 1,
                 "tracking": {
                   "Ducats": 10,
-                  "Melee": 1,
-                  "Ranged": 0
-                },
-                "traits": [
-                  {
-                    "trait": {
-                      "item": "Abilities§Legionnaire (Melee)",
-                      "text": "\"Congrats, worm. You are better with a knife than the usual canon-fodder...\""
-                    }
-                  }
-                ]
+                  "Legionnaire (Melee)": 1,
+                  "Melee": 1
+                }
               },
               "Legionnaire (Ranged)": {
                 "number": 2,
                 "order": 2,
                 "tracking": {
                   "Ducats": 10,
-                  "Melee": 0,
+                  "Legionnaire (Ranged)": 1,
                   "Ranged": 1
-                },
-                "traits": [
-                  {
-                    "trait": "Abilities§Legionnaire (Ranged)"
-                  }
-                ]
+                }
               }
             },
             "statType": "rank",
             "tracked": true,
-            "value": "Heretic Trooper",
+            "value": "-",
             "visibility": "normal"
           }
         },
